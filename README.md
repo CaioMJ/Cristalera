@@ -1,2 +1,2 @@
 # Cristalera
- Granular glitch audio effect made withh Csound
+ Granular glitch audio effect made with Csound
