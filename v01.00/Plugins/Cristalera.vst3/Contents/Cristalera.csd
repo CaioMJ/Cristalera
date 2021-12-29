@@ -15,6 +15,7 @@ label bounds(360, 70, 80, 20) channel("label10029") text("GRAINS") fontColour(25
 
 button bounds(8, 80, 90, 40) channel("MonoStereo") text("Mono Input", "Stereo Input") outlineThickness(2) outlineColour(188, 151, 49, 255)
 button bounds(703, 80, 90, 40) channel("Bypass") text("Bypass", "Bypass") colour:1(255, 0, 0, 255) outlineThickness(2) outlineColour(188, 151, 49, 255)
+label bounds(323, 236, 154, 20) channel("label10034") text("RANDOMIZATION") fontColour(255, 255, 255, 255)
 
 //Windowing
 label bounds(310, 106, 80, 15) channel("label10024") text("Windowing") fontColour(255, 255, 255, 255)
@@ -22,13 +23,13 @@ combobox bounds(400, 103, 93, 20) text("Sync", "Hanning", "Blackman-Harris", "Ga
 //Duration
 hslider bounds(120, 140, 245, 35) range(0.01, 0.9, 0.1, 0.5, 0.01) channel("GrainDuration") text("Grain Duration") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255) 
 hslider bounds(120, 270, 245, 35) range(0.01, 1, 0.01, 0.5, 0.01) channel("DurationVariationRange") text("Duration Range") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
-hslider bounds(120, 310, 245, 35) range(0.01, 10, 0.01, 1, 0.1) channel("DurationVariationRate") text("Duration Rate") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
+hslider bounds(120, 310, 245, 35) range(0.5, 10, 0.5, 1, 0.1) channel("DurationVariationRate") text("Duration Rate") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 //Density
 hslider bounds(425, 140, 245, 35) range(0.5, 100, 14, 0.5, 0.1) channel("GrainDensity") text("Grain Density") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 hslider bounds(425, 270, 245, 35) range(0.01, 100, 0.01, 0.5, 0.1) channel("DensityVariationRange") text("Density Range") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
-hslider bounds(425, 310, 245, 35) range(0.01, 10, 0.01, 1, 0.1) channel("DensityVariationRate") text("Density Rate") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
+hslider bounds(424, 310, 245, 35) range(0.5, 10, 0.5, 1, 0.1) channel("DensityVariationRate") text("Density Rate") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 //Spread
-hslider bounds(256, 180, 300, 35) range(0, 0.5, 0.5, 1, 0.01) text("Grain Spread") channel("GrainSpread") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
+hslider bounds(120, 180, 550, 35) range(0, 0.5, 0.5, 1, 0.01) text("Grain Spread") channel("GrainSpread") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 
 //LFO
 label bounds(383, 364, 34, 20) fontColour(255, 255, 255, 255) text("LFO") channel("label20")
@@ -56,7 +57,6 @@ image bounds(105, 225, 590, 2) channel("image10000") colour(188, 151, 49, 255)
 image bounds(105, 355, 590, 2) channel("image10000") colour(188, 151, 49, 255)
 image bounds(105, 520, 590, 2) channel("image10000") colour(188, 151, 49, 255)
 
-label bounds(323, 236, 154, 20) channel("label10034") text("RANDOMIZATION") fontColour(255, 255, 255, 255)
 </Cabbage>
 <CsoundSynthesizer>
 <CsOptions>
@@ -69,7 +69,9 @@ nchnls = 2
 0dbfs = 1
 
 //TODO
-;Randomization not working as expected, acting as a modifier rather than randomizing
+;Scale metering range
+;Review metering colors
+;Presets
 ;General UI review and polish
 
 //Windowing
@@ -139,9 +141,9 @@ instr GrainTrigger
         kLfoDurRange    chnget "LfoDurRange"
         kLfoDurFreq     chnget "LfoDurFreq"
     
-        kDurVar     jitter  kDurVarRange, .2 * kDurVarRate, .5 * kDurVarRate
+        kDurVar     jitter  kDurVarRange, .25 * kDurVarRate, .5 * kDurVarRate
         kLfoDur     lfo     kLfoDurRange, kLfoDurFreq
-        kDurTotal   limit   kDur + kDurVar + kLfoDur , 0.01, 1
+        kDurTotal   limit   kDur + kDurVar + kLfoDur , 0.01, 0.9
         
     //Grain Density
         kDensity            chnget "GrainDensity"
@@ -152,9 +154,9 @@ instr GrainTrigger
         kLfoDensityFreq     chnget "LfoDensityFreq"
     
         kLfoDensity     lfo     kLfoDensityRange, kLfoDensityFreq 
-        kDensityVar     jitter  kDensityVarRange, .2 * kDensityVarRate, .5 * kDensityVarRate
+        kDensityVar     jitter  kDensityVarRange, .25 * kDensityVarRate, .5 * kDensityVarRate
         kDensityTotal   limit   kDensity + kDensityVar + kLfoDensity, 0.1, 80
-        
+
         kTrigger metro kDensityTotal
         
         schedkwhen kTrigger, 0, 0, "Grains", 0, kDurTotal 

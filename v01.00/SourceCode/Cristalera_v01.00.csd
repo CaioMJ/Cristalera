@@ -23,11 +23,11 @@ combobox bounds(400, 103, 93, 20) text("Sync", "Hanning", "Blackman-Harris", "Ga
 //Duration
 hslider bounds(120, 140, 245, 35) range(0.01, 0.9, 0.1, 0.5, 0.01) channel("GrainDuration") text("Grain Duration") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255) 
 hslider bounds(120, 270, 245, 35) range(0.01, 1, 0.01, 0.5, 0.01) channel("DurationVariationRange") text("Duration Range") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
-hslider bounds(120, 310, 245, 35) range(0.01, 10, 0.01, 1, 0.1) channel("DurationVariationRate") text("Duration Rate") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
+hslider bounds(120, 310, 245, 35) range(0.5, 10, 0.5, 1, 0.1) channel("DurationVariationRate") text("Duration Rate") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 //Density
 hslider bounds(425, 140, 245, 35) range(0.5, 100, 14, 0.5, 0.1) channel("GrainDensity") text("Grain Density") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 hslider bounds(425, 270, 245, 35) range(0.01, 100, 0.01, 0.5, 0.1) channel("DensityVariationRange") text("Density Range") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
-hslider bounds(425, 310, 245, 35) range(0.01, 10, 0.01, 1, 0.1) channel("DensityVariationRate") text("Density Rate") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
+hslider bounds(424, 310, 245, 35) range(0.5, 10, 0.5, 1, 0.1) channel("DensityVariationRate") text("Density Rate") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 //Spread
 hslider bounds(120, 180, 550, 35) range(0, 0.5, 0.5, 1, 0.01) text("Grain Spread") channel("GrainSpread") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 
@@ -69,7 +69,9 @@ nchnls = 2
 0dbfs = 1
 
 //TODO
-;Randomization not working
+;Scale metering range
+;Review metering colors
+;Presets
 ;General UI review and polish
 
 //Windowing
@@ -113,10 +115,10 @@ endop
 instr Input
         gkMonoStereo chnget "MonoStereo"
 
-        ;a1 inch 1
-        ;a2 inch 2
+        a1 inch 1
+        a2 inch 2
         
-        a1, a2 diskin "test_sample.wav"
+        ;a1, a2 diskin "test_sample.wav"
         
         //SUM INPUT FOR GRANULATION
         aInputSum = (a1 + a2) * .5   
@@ -139,10 +141,9 @@ instr GrainTrigger
         kLfoDurRange    chnget "LfoDurRange"
         kLfoDurFreq     chnget "LfoDurFreq"
     
-        kDurVar     jspline  kDurVarRange, .1 * kDurVarRate, .7 * kDurVarRate
+        kDurVar     jitter  kDurVarRange, .25 * kDurVarRate, .5 * kDurVarRate
         kLfoDur     lfo     kLfoDurRange, kLfoDurFreq
         kDurTotal   limit   kDur + kDurVar + kLfoDur , 0.01, 0.9
-        ;printk 0.1, kDurTotal
         
     //Grain Density
         kDensity            chnget "GrainDensity"
@@ -153,9 +154,8 @@ instr GrainTrigger
         kLfoDensityFreq     chnget "LfoDensityFreq"
     
         kLfoDensity     lfo     kLfoDensityRange, kLfoDensityFreq 
-        kDensityVar     jspline  kDensityVarRange, .1 * kDensityVarRate, .7 * kDensityVarRate
+        kDensityVar     jitter  kDensityVarRange, .25 * kDensityVarRate, .5 * kDensityVarRate
         kDensityTotal   limit   kDensity + kDensityVar + kLfoDensity, 0.1, 80
-        printk 0.1, kDensityVar
 
         kTrigger metro kDensityTotal
         
