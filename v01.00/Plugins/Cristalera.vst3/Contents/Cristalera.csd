@@ -10,7 +10,7 @@ label bounds(8, 38, 141, 15) text("by Caio M. Jiacomini") colour(255, 255, 255, 
 
 //Globals
 vslider bounds(722, 140, 50, 350), channel("Mix"), range(0, 1, 1, 1, 0.01), text("Mix"), trackerColour(188, 151, 49, 255), outlineColour(0, 0, 0, 50), textColour(255, 255, 255, 255)
-vslider bounds(27, 140, 50, 350), channel("Gain"), range(0, 2, 1, 1, 0.01), text("Gain"), trackerColour(188, 151, 49, 255), outlineColour(0, 0, 0, 50), textColour(255, 255, 255, 255)
+vslider bounds(26, 140, 50, 350), channel("Gain"), range(-24, 24, 0, 1, 0.1), text("Gain"), trackerColour(188, 151, 49, 255), outlineColour(0, 0, 0, 50), textColour(255, 255, 255, 255)
 label bounds(360, 70, 80, 20) channel("label10029") text("GRAINS") fontColour(255, 255, 255, 255)
 
 button bounds(8, 80, 90, 40) channel("MonoStereo") text("Mono Input", "Stereo Input") outlineThickness(2) outlineColour(188, 151, 49, 255)
@@ -19,7 +19,7 @@ label bounds(323, 236, 154, 20) channel("label10034") text("RANDOMIZATION") font
 
 //Windowing
 label bounds(310, 106, 80, 15) channel("label10024") text("Windowing") fontColour(255, 255, 255, 255)
-combobox bounds(400, 103, 93, 20) text("Sync", "Hanning", "Blackman-Harris", "Gaussian", "Kaiser", "Rectangle", "") fontColour(188, 151, 49, 255) channel("WindowingSelection") value(2)
+combobox bounds(400, 102, 93, 20) text("Sync", "Hanning", "Blackman-Harris", "Gaussian", "Gate", "Rectangle", "") fontColour(188, 151, 49, 255) channel("WindowingSelection") value(2)
 //Duration
 hslider bounds(120, 140, 245, 35) range(0.01, 0.9, 0.1, 0.5, 0.01) channel("GrainDuration") text("Grain Duration") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255) 
 hslider bounds(120, 270, 245, 35) range(0.01, 1, 0.01, 0.5, 0.01) channel("DurationVariationRange") text("Duration Range") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
@@ -71,7 +71,6 @@ nchnls = 2
 //TODO
 ;Scale metering range
 ;Review metering colors
-;Presets
 ;General UI review and polish
 
 //Windowing
@@ -79,7 +78,8 @@ giWfn9 ftgen 1, 0, 16384, 20, 9 //Sync window
 giWfn2 ftgen 2, 0, 16384, 20, 2 //Hanning window
 giWfn5 ftgen 3, 0, 16384, 20, 5 //Blackman-Harris window
 giWfn5 ftgen 4, 0, 16384, 20, 6, 1, 2 //Gaussian window
-giWfn5 ftgen 5, 0, 16384, 20, 7, 1, 3.5 //Kaiser window
+giWfn8 ftgen 5, 0, 16384, 7, 0, 64, 1, 16256, 0, 64 //Gate
+;giWfn5 ftgen 5, 0, 16384, 20, 7, 1, 3.5 //Kaiser window
 giWfn8 ftgen 6, 0, 16384, 20, 8 //Rectangle window
 
 //Linear distribution opcodes for random pan
@@ -200,6 +200,8 @@ instr Output
     aDryL   chnget "DrySignalL"
     aDryR   chnget "DrySignalR"
     aDrySum chnget "DrySignalSum"
+    
+    kGain = ampdb(kGain)
     
     //DRY/WET MIX
     if gkMonoStereo == 0 then       
