@@ -117,9 +117,7 @@ instr Input
 
         a1 inch 1
         a2 inch 2
-        
-        ;a1, a2 diskin "test_sample.wav"
-        
+                
         //SUM INPUT FOR GRANULATION
         aInputSum = (a1 + a2) * .5   
         chnmix aInputSum, "DrySignalSum"  
