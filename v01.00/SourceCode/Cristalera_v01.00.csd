@@ -43,8 +43,8 @@ hslider bounds(425, 470, 245, 35) range(0, 100, 0, 0.5, 0.01) text("Depth") chan
 hslider bounds(425, 430, 245, 35) range(0, 15, 0, 0.5, 0.01) text("Frequency") channel("LfoDensityFreq") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 
 //METER
-hmeter bounds(118, 535, 556, 25) channel("vu1") overlayColour(0, 0, 0) meterColour:2(255, 0, 0) meterColour:1(255, 255, 0) meterColour:0(0, 255, 0) ;outlineColour(255, 255, 255, 255)
-hmeter bounds(118, 570, 556, 25) channel("vu2") overlayColour(0, 0, 0) meterColour:2(255, 0, 0) meterColour:1(255, 255, 0) meterColour:0(0, 255, 0) ;outlineColour(255, 255, 255, 255)
+hmeter bounds(118, 535, 556, 25) channel("vu1") overlayColour(0, 0, 0) meterColour:2(255, 0, 0) meterColour:1(188, 151, 49, 255) meterColour:0(188, 151, 49, 255) ;outlineColour(255, 255, 255, 255)
+hmeter bounds(118, 570, 556, 25) channel("vu2") overlayColour(0, 0, 0) meterColour:2(255, 0, 0) meterColour:1(188, 151, 49, 255) meterColour:0(188, 151, 49, 255) ;outlineColour(255, 255, 255, 255)
 
 //LINES
 //Vertical
@@ -68,18 +68,12 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-//TODO
-;Scale metering range
-;Review metering colors
-;General UI review and polish
-
 //Windowing
 giWfn9 ftgen 1, 0, 16384, 20, 9 //Sync window
 giWfn2 ftgen 2, 0, 16384, 20, 2 //Hanning window
 giWfn5 ftgen 3, 0, 16384, 20, 5 //Blackman-Harris window
 giWfn5 ftgen 4, 0, 16384, 20, 6, 1, 2 //Gaussian window
 giWfn8 ftgen 5, 0, 16384, 7, 0, 64, 1, 16256, 0, 64 //Gate
-;giWfn5 ftgen 5, 0, 16384, 20, 7, 1, 3.5 //Kaiser window
 giWfn8 ftgen 6, 0, 16384, 20, 8 //Rectangle window
 
 //Linear distribution opcodes for random pan

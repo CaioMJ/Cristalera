@@ -43,8 +43,8 @@ hslider bounds(425, 470, 245, 35) range(0, 100, 0, 0.5, 0.01) text("Depth") chan
 hslider bounds(425, 430, 245, 35) range(0, 15, 0, 0.5, 0.01) text("Frequency") channel("LfoDensityFreq") trackerColour(188, 151, 49, 255) textColour(255, 255, 255, 255)
 
 //METER
-hmeter bounds(118, 535, 556, 25) channel("vu1") overlayColour(0, 0, 0) meterColour:2(255, 0, 0) meterColour:1(255, 255, 0) meterColour:0(0, 255, 0) ;outlineColour(255, 255, 255, 255)
-hmeter bounds(118, 570, 556, 25) channel("vu2") overlayColour(0, 0, 0) meterColour:2(255, 0, 0) meterColour:1(255, 255, 0) meterColour:0(0, 255, 0) ;outlineColour(255, 255, 255, 255)
+hmeter bounds(118, 535, 556, 25) channel("vu1") overlayColour(0, 0, 0) meterColour:2(255, 0, 0) meterColour:1(188, 151, 49, 255) meterColour:0(188, 151, 49, 255) ;outlineColour(255, 255, 255, 255)
+hmeter bounds(118, 570, 556, 25) channel("vu2") overlayColour(0, 0, 0) meterColour:2(255, 0, 0) meterColour:1(188, 151, 49, 255) meterColour:0(188, 151, 49, 255) ;outlineColour(255, 255, 255, 255)
 
 //LINES
 //Vertical
@@ -117,9 +117,7 @@ instr Input
 
         a1 inch 1
         a2 inch 2
-        
-        ;a1, a2 diskin "test_sample.wav"
-        
+                
         //SUM INPUT FOR GRANULATION
         aInputSum = (a1 + a2) * .5   
         chnmix aInputSum, "DrySignalSum"  
